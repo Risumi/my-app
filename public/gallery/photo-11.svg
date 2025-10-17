@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#0b1120" />
+  <rect x="200" y="140" width="400" height="320" rx="24" fill="#1f2937" />
+  <polygon points="200,360 400,200 600,360" fill="#4b5563" opacity="0.45" />
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#f9fafb" font-size="40" font-family="Segoe UI">Photo 11</text>
+</svg>

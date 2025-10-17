@@ -24,3 +24,50 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.scrollbar-invisible {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-invisible::-webkit-scrollbar {
+  display: none;
+}
+
+.hero-gradient {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-gradient::before,
+.hero-gradient::after {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  pointer-events: none;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.35), transparent 55%),
+    radial-gradient(circle at 80% 30%, rgba(148, 163, 184, 0.25), transparent 60%),
+    radial-gradient(circle at 50% 80%, rgba(226, 232, 240, 0.2), transparent 55%);
+  filter: blur(0.5px);
+  opacity: 0.7;
+  animation: heroGradientDrift 26s ease-in-out infinite;
+  z-index: -1;
+}
+
+.hero-gradient::after {
+  animation-duration: 32s;
+  animation-direction: reverse;
+  opacity: 0.5;
+}
+
+@keyframes heroGradientDrift {
+  0% {
+    transform: translate3d(-6%, -4%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(8%, 6%, 0) scale(1.05);
+  }
+  100% {
+    transform: translate3d(-6%, -4%, 0) scale(1);
+  }
+}

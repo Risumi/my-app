@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#1f2937" />
+  <rect x="160" y="120" width="480" height="360" rx="32" fill="#111827" />
+  <circle cx="400" cy="300" r="140" fill="#4b5563" opacity="0.45" />
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#f3f4f6" font-size="42" font-family="Segoe UI">Photo 07</text>
+</svg>

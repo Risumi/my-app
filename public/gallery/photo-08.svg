@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#0f172a" />
+  <rect x="140" y="140" width="520" height="320" rx="28" fill="#1f2937" />
+  <path d="M200 360 C280 250 520 250 600 360" fill="#4b5563" opacity="0.5" />
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#e5e7eb" font-size="40" font-family="Segoe UI">Photo 08</text>
+</svg>
