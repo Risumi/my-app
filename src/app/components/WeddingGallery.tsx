@@ -154,7 +154,7 @@ export default function WeddingGallery({ images }: WeddingGalleryProps) {
 
   return (
     <div
-      className="flex w-full flex-col gap-8"
+      className="flex w-full flex-col gap-10"
       onMouseEnter={markInteracting}
       onMouseLeave={() => {
         clearInteractionTimeout();
@@ -163,8 +163,8 @@ export default function WeddingGallery({ images }: WeddingGalleryProps) {
       onFocusCapture={markInteracting}
       onBlurCapture={markInteracting}
     >
-      <div className="relative overflow-hidden rounded-[2.5rem] border border-gray-300 bg-white/40 p-4 shadow-lg backdrop-blur">
-        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-gray-200">
+      <div className="relative overflow-hidden rounded-[2.75rem] border border-white/12 bg-gradient-to-br from-[#1A1B33]/85 via-[#1A1B33]/60 to-[#4B3F72]/70 p-5 shadow-[0_25px_90px_-40px_rgba(8,6,24,0.9)] backdrop-blur">
+        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border border-white/10 bg-[#12132b] shadow-[inset_0_0_25px_rgba(10,8,30,0.65)]">
           <Image
             src={activeImage.src}
             alt={activeImage.alt}
@@ -173,20 +173,23 @@ export default function WeddingGallery({ images }: WeddingGalleryProps) {
             sizes="(max-width: 1024px) 100vw, 900px"
             priority
           />
+          <div className="absolute inset-x-0 bottom-0 h-[35%] bg-gradient-to-t from-[#0b0d21]/70 via-transparent to-transparent" />
         </div>
-        <div className="mt-6 flex flex-col gap-2 px-2 pb-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-gray-500">
+        <div className="mt-6 flex flex-col gap-2 px-2 pb-2 text-[#F0F0F5]">
+          <p className="text-xs font-semibold uppercase tracking-[0.45em] text-[#E9C46A]/85 sm:text-sm">
             {activeImage.title}
           </p>
-          <p className="text-sm leading-6 text-gray-600">{activeImage.description}</p>
+          <p className="text-sm leading-6 text-[#F0F0F5]/80 sm:text-base lg:text-lg lg:leading-7">
+            {activeImage.description}
+          </p>
         </div>
       </div>
 
-      <div className="flex items-center justify-between">
-        <span className="text-xs uppercase tracking-[0.3em] text-gray-500">
+      <div className="flex items-center justify-between text-[#F0F0F5]/70">
+        <span className="text-xs uppercase tracking-[0.4em] sm:text-sm">
           Pilih Momen
         </span>
-        <span className="text-xs text-gray-400">
+        <span className="text-xs sm:text-sm">
           {String(normalizedIndex + 1).padStart(2, "0")}/{String(totalImages).padStart(2, "0")}
         </span>
       </div>
@@ -195,7 +198,7 @@ export default function WeddingGallery({ images }: WeddingGalleryProps) {
         <button
           type="button"
           onClick={() => scrollThumbnails("prev")}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 bg-white/90 text-gray-700 shadow transition hover:border-gray-400 hover:text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 disabled:cursor-not-allowed disabled:border-gray-200 disabled:text-gray-300"
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/10 text-[#F0F0F5]/80 shadow-[0_12px_35px_-20px_rgba(8,6,24,0.9)] transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E9C46A]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d21] disabled:cursor-not-allowed disabled:border-white/5 disabled:text-[#F0F0F5]/30"
           disabled={totalImages <= 1}
           aria-label="Foto sebelumnya"
         >
@@ -213,10 +216,10 @@ export default function WeddingGallery({ images }: WeddingGalleryProps) {
                 key={`${image.src}-${image.virtualIndex}`}
                 type="button"
                 onClick={() => handleThumbnailClick(image.originalIndex)}
-                className={`group relative flex-shrink-0 overflow-hidden rounded-2xl border transition focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 ${
+                className={`group relative flex-shrink-0 overflow-hidden rounded-2xl border transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E9C46A]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d21] ${
                   isActive
-                    ? "border-gray-900"
-                    : "border-gray-200 hover:border-gray-400"
+                    ? "border-[#E9C46A]/80 shadow-[0_18px_45px_-28px_rgba(233,196,106,0.55)]"
+                    : "border-white/15 hover:border-[#E9C46A]/50"
                 }`}
                 style={{ width: `${THUMB_WIDTH}px`, height: "160px" }}
                 aria-label={`Tampilkan foto ${image.title}`}
@@ -232,10 +235,11 @@ export default function WeddingGallery({ images }: WeddingGalleryProps) {
                 />
                 <span
                   className={`absolute inset-0 border-2 transition ${
-                    isActive ? "border-gray-900 mix-blend-screen" : "border-transparent"
+                    isActive ? "border-[#E9C46A]/80 mix-blend-screen" : "border-transparent"
                   }`}
                   aria-hidden="true"
                 />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0d21]/55 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
               </button>
             );
           })}
@@ -244,7 +248,7 @@ export default function WeddingGallery({ images }: WeddingGalleryProps) {
         <button
           type="button"
           onClick={() => scrollThumbnails("next")}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 bg-white/90 text-gray-700 shadow transition hover:border-gray-400 hover:text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 disabled:cursor-not-allowed disabled:border-gray-200 disabled:text-gray-300"
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/10 text-[#F0F0F5]/80 shadow-[0_12px_35px_-20px_rgba(8,6,24,0.9)] transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E9C46A]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d21] disabled:cursor-not-allowed disabled:border-white/5 disabled:text-[#F0F0F5]/30"
           disabled={totalImages <= 1}
           aria-label="Foto selanjutnya"
         >
@@ -270,3 +274,5 @@ function ThumbArrow({ direction }: { direction: "prev" | "next" }) {
     </svg>
   );
 }
+
+

@@ -2,11 +2,83 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { type ReactNode, useMemo, useState } from "react";
+import { Montserrat_Alternates, Raleway } from "next/font/google";
+import { type CSSProperties, type ReactNode, useMemo, useState } from "react";
 import FloatingNav from "@/app/components/FloatingNav";
 import InvitationShell from "@/app/components/InvitationShell";
 import RevealSection from "@/app/components/RevealSection";
 import WeddingGallery from "@/app/components/WeddingGallery";
+
+const displayFont = Montserrat_Alternates({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-display",
+});
+
+const bodyFont = Raleway({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-body",
+});
+
+const starFieldStyle: CSSProperties = {
+  backgroundImage:
+    "radial-gradient(1px 1px at 20px 40px, rgba(240, 240, 245, 0.45) 0, transparent 55%), radial-gradient(1px 1px at 140px 120px, rgba(201, 169, 225, 0.4) 0, transparent 55%), radial-gradient(1px 1px at 70px 180px, rgba(233, 196, 106, 0.35) 0, transparent 55%)",
+  backgroundSize: "200px 200px",
+};
+
+const distantStarsStyle: CSSProperties = {
+  backgroundImage:
+    "radial-gradient(2px 2px at 30px 160px, rgba(240, 240, 245, 0.25) 0, transparent 60%), radial-gradient(2px 2px at 220px 80px, rgba(201, 169, 225, 0.3) 0, transparent 60%), radial-gradient(2px 2px at 160px 200px, rgba(233, 196, 106, 0.25) 0, transparent 60%)",
+  backgroundSize: "320px 320px",
+};
+
+type FloatingParticle = {
+  left: string;
+  top: string;
+  size: string;
+  delay: string;
+  duration: string;
+  opacity: string;
+};
+
+const floatingParticles: FloatingParticle[] = [
+  { left: "12%", top: "22%", size: "h-2 w-2", delay: "0s", duration: "7s", opacity: "opacity-60" },
+  { left: "28%", top: "65%", size: "h-3 w-3", delay: "1.5s", duration: "9s", opacity: "opacity-70" },
+  { left: "48%", top: "18%", size: "h-2.5 w-2.5", delay: "0.8s", duration: "8s", opacity: "opacity-75" },
+  { left: "76%", top: "28%", size: "h-2 w-2", delay: "2.2s", duration: "10s", opacity: "opacity-60" },
+  { left: "82%", top: "58%", size: "h-2.5 w-2.5", delay: "3.5s", duration: "12s", opacity: "opacity-80" },
+  { left: "60%", top: "78%", size: "h-2 w-2", delay: "1.2s", duration: "9s", opacity: "opacity-65" },
+  { left: "35%", top: "40%", size: "h-1.5 w-1.5", delay: "2.8s", duration: "11s", opacity: "opacity-75" },
+  { left: "18%", top: "78%", size: "h-2 w-2", delay: "4.1s", duration: "13s", opacity: "opacity-55" },
+];
+
+type BlinkingStar = {
+  left: string;
+  top: string;
+  size: string;
+  delay: string;
+  duration: string;
+  opacity: number;
+  blurClass?: string;
+};
+
+const blinkingStars: BlinkingStar[] = [
+  { left: "15%", top: "14%", size: "h-1.5 w-1.5", delay: "0s", duration: "4s", opacity: 0.9 },
+  { left: "35%", top: "10%", size: "h-1 w-1", delay: "1.2s", duration: "5.5s", opacity: 0.75, blurClass: "blur-[0.5px]" },
+  { left: "58%", top: "12%", size: "h-1.5 w-1.5", delay: "2.4s", duration: "4.8s", opacity: 0.85 },
+  { left: "78%", top: "16%", size: "h-1 w-1", delay: "3.1s", duration: "5.2s", opacity: 0.7 },
+  { left: "22%", top: "32%", size: "h-1.5 w-1.5", delay: "1.8s", duration: "3.8s", opacity: 0.88 },
+  { left: "48%", top: "30%", size: "h-1 w-1", delay: "2.5s", duration: "4.3s", opacity: 0.72, blurClass: "blur-[0.5px]" },
+  { left: "68%", top: "34%", size: "h-1.5 w-1.5", delay: "0.9s", duration: "4.6s", opacity: 0.82 },
+  { left: "84%", top: "38%", size: "h-1 w-1", delay: "4.4s", duration: "5.1s", opacity: 0.68, blurClass: "blur-[0.5px]" },
+  { left: "28%", top: "54%", size: "h-1.5 w-1.5", delay: "3.7s", duration: "4.9s", opacity: 0.86 },
+  { left: "52%", top: "58%", size: "h-1 w-1", delay: "0.6s", duration: "4.2s", opacity: 0.74 },
+  { left: "74%", top: "56%", size: "h-1.5 w-1.5", delay: "2.9s", duration: "5.4s", opacity: 0.8 },
+  { left: "40%", top: "70%", size: "h-1.5 w-1.5", delay: "4.6s", duration: "5.6s", opacity: 0.78 },
+  { left: "62%", top: "74%", size: "h-1 w-1", delay: "1.4s", duration: "4s", opacity: 0.7, blurClass: "blur-[0.5px]" },
+  { left: "18%", top: "68%", size: "h-1 w-1", delay: "2s", duration: "5.3s", opacity: 0.65 },
+];
 
 const ARABIC_FONT_STACK =
   "'Noto Sans Arabic', 'Cairo', 'Amiri', 'Scheherazade New', 'Traditional Arabic', sans-serif";
@@ -243,7 +315,6 @@ const galleryImages = [
     description: "Backdrop sederhana yang menjadi latar foto keluarga inti.",
   },
 ];
-
 export default function WeddingPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
@@ -253,10 +324,6 @@ export default function WeddingPage() {
     const start = (page - 1) * WISHES_PER_PAGE;
     return wellWishes.slice(start, start + WISHES_PER_PAGE);
   }, [page]);
-  const pageNumbers = useMemo(
-    () => Array.from({ length: totalPages }, (_, index) => index + 1),
-    [totalPages]
-  );
 
   return (
     <InvitationShell
@@ -265,290 +332,350 @@ export default function WeddingPage() {
       overlayDescription="Kami mengundang Anda untuk menjadi bagian dari perjalanan kami."
       buttonLabel="Buka Undangan"
     >
-      <main className="relative">
-        <FloatingNav sections={sections} />
+      <main className={`${bodyFont.className} relative min-h-screen bg-[#0b0d21] text-[#F0F0F5] antialiased`}>
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(201,169,225,0.24),transparent_60%),radial-gradient(circle_at_80%_15%,rgba(75,63,114,0.45),transparent_65%),linear-gradient(180deg,#0b0d21_0%,#1A1B33_55%,#0b0d21_100%)]" />
+          <div className="absolute inset-0 blur-3xl bg-[radial-gradient(circle_at_50%_-10%,rgba(233,196,106,0.28),transparent_65%)] opacity-70" />
+          <div className="absolute inset-0 opacity-60" style={starFieldStyle} />
+          <div className="absolute inset-0 opacity-40" style={distantStarsStyle} />
+          <div className="absolute -left-40 top-1/5 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(201,169,225,0.38),transparent_70%)] blur-[130px]" />
+          <div className="absolute -right-48 bottom-1/4 h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(233,196,106,0.32),transparent_70%)] blur-[150px]" />
+          {blinkingStars.map((star, index) => (
+            <div
+              key={`blinking-star-${index}`}
+              className={`pointer-events-none absolute rounded-full bg-[#F0F0F5] shadow-[0_0_10px_rgba(240,240,245,0.65)] ${star.size} ${star.blurClass ?? ""}`}
+              style={{
+                left: star.left,
+                top: star.top,
+                opacity: star.opacity,
+                animation: `pulse ${star.duration} ease-in-out infinite`,
+                animationDelay: star.delay,
+              }}
+            />
+          ))}
+        </div>
+        {floatingParticles.map((particle, index) => (
+          <span
+            key={`${particle.left}-${particle.top}-${index}`}
+            className={`pointer-events-none absolute rounded-full bg-[#F0F0F5]/80 shadow-[0_0_12px_rgba(240,240,245,0.6)] ${particle.size} ${particle.opacity} animate-pulse`}
+            style={{
+              left: particle.left,
+              top: particle.top,
+              animationDelay: particle.delay,
+              animationDuration: particle.duration,
+            }}
+          />
+        ))}
+        <div className="relative z-10">
+          <FloatingNav sections={sections} />
 
-        <RevealSection
-          id="undangan"
-          className="mx-auto flex min-h-screen max-w-4xl items-center px-4 py-16 sm:px-6 sm:py-24"
-        >
-          <div className="relative w-full overflow-hidden rounded-[2.75rem] border border-gray-200 bg-white/80 p-8 text-center shadow-sm backdrop-blur sm:p-12">
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute -top-32 -left-20 h-56 w-56 rounded-full bg-gradient-to-br from-gray-100/70 via-white to-gray-200/50 opacity-75 blur-3xl" />
-              <div className="absolute -bottom-36 right-[-6rem] h-72 w-72 rounded-full bg-gradient-to-tr from-gray-200/60 via-white to-gray-100/80 opacity-80 blur-3xl" />
-              <div className="absolute top-1/2 left-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/40 bg-white/10 backdrop-blur-sm" />
-            </div>
-            <div className="relative mx-auto flex max-w-2xl flex-col items-center gap-8">
-              <div className="space-y-4">
-                <p
-                  className="text-3xl font-semibold text-gray-900 leading-relaxed sm:text-4xl"
-                  lang="ar"
-                  dir="rtl"
+          <RevealSection
+            id="undangan"
+            className="relative mx-auto flex min-h-screen max-w-5xl items-center px-4 py-16 sm:px-6 sm:py-24"
+          >
+            <div className="relative w-full overflow-hidden rounded-[2.75rem] border border-white/15 bg-white/5 p-8 text-center shadow-[0_25px_120px_-45px_rgba(8,6,24,0.9)] backdrop-blur-2xl sm:p-12">
+              <div className="pointer-events-none absolute inset-0">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(201,169,225,0.2),transparent_65%),radial-gradient(circle_at_bottom,rgba(75,63,114,0.3),transparent_70%)]" />
+                <div className="absolute left-1/2 top-10 h-40 w-40 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(233,196,106,0.32),transparent_65%)] blur-3xl" />
+              </div>
+              <div className="relative mx-auto flex max-w-3xl flex-col items-center gap-12">
+                
+                <div className="flex flex-col items-center gap-4">
+                  <div className="h-px w-24 bg-gradient-to-r from-transparent via-[#E9C46A]/80 to-transparent" />
                   
-                >
-                  {SURAH_VERSE_ARABIC}
-                </p>
-                <p className="text-sm leading-7 text-gray-600 sm:text-base">{SURAH_VERSE_TRANSLATION}</p>
+                  <p
+                    className="text-[1.6rem] leading-normal text-[#F0F0F5] sm:text-[1.9rem] lg:text-[2.25rem] lg:leading-tight"
+                    lang="ar"
+                    dir="rtl"
+                    style={{ fontFamily: ARABIC_FONT_STACK }}
+                  >
+                    {SURAH_VERSE_ARABIC}
+                  </p>
+                  <p className="max-w-2xl text-sm leading-7 text-[#F0F0F5]/80 sm:text-base lg:text-lg lg:leading-8">
+                    {SURAH_VERSE_TRANSLATION}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </RevealSection>
-
-        <RevealSection
-          id="mempelai"
-          className="mx-auto flex min-h-screen max-w-4xl items-center px-4 py-16 sm:px-6 sm:py-24"
-        >
-          <div className="space-y-12 rounded-[2.5rem] border border-gray-200 bg-white/70 p-8 text-center shadow-sm backdrop-blur sm:space-y-16 sm:p-12">
-            <div className="space-y-3">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.4em] text-gray-700">Mempelai</h2>
-              <p className="text-sm leading-6 text-gray-600">
-                Perkenalan singkat Entin dan Rizky yang saling melengkapi dalam perjalanan hidup, mimpi, dan doa.
-              </p>
-            </div>
-            <div className="grid gap-8 md:grid-cols-2 md:gap-12">
-              {coupleProfiles.map((profile) => (
-                <div
-                  key={profile.id}
-                  className="flex h-full flex-col items-center gap-5 rounded-[2rem] border border-gray-200 bg-white/80 p-6 text-center shadow-sm sm:p-8"
+          </RevealSection>
+          <RevealSection
+            id="mempelai"
+            className="relative mx-auto flex min-h-screen max-w-5xl items-center px-4 py-16 sm:px-6 sm:py-24"
+          >
+            <div className="relative w-full space-y-12 overflow-hidden rounded-[2.5rem] border border-white/15 bg-white/10 p-8 text-center shadow-[0_25px_120px_-45px_rgba(8,6,24,0.9)] backdrop-blur-2xl sm:space-y-16 sm:p-12">
+              <div className="pointer-events-none absolute inset-0">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(201,169,225,0.2),transparent_65%)]" />
+              </div>
+              <div className="relative space-y-3">
+                <h2
+                  className={`${displayFont.className} text-xs font-semibold uppercase tracking-[0.55em] text-[#E9C46A] sm:text-sm lg:text-base lg:tracking-[0.6em]`}
                 >
-                  <div className="relative h-40 w-40 overflow-hidden rounded-full border border-gray-200 bg-white/90 shadow-sm sm:h-48 sm:w-48">
-                    <Image
-                      src={profile.imageSrc}
-                      alt={profile.imageAlt}
-                      width={192}
-                      height={192}
-                      className="h-full w-full object-cover"
-                      priority={profile.id === "bride"}
+                  Mempelai
+                </h2>
+                <p className="mx-auto max-w-2xl text-sm leading-6 text-[#F0F0F5]/75 sm:text-base lg:text-lg lg:leading-7">
+                  Perkenalan singkat Entin dan Rizky yang saling melengkapi dalam perjalanan hidup, mimpi, dan doa.
+                </p>
+              </div>
+              <div className="relative grid gap-8 sm:gap-10 lg:gap-12">
+                {coupleProfiles.map((profile) => (
+                  <div
+                    key={profile.id}
+                    className="relative flex h-full flex-col items-center gap-5 overflow-hidden rounded-[2rem] border border-white/12 bg-gradient-to-b from-[#1A1B33]/80 via-[#1A1B33]/60 to-[#4B3F72]/60 p-6 text-center shadow-[0_20px_60px_-35px_rgba(10,7,30,0.9)] backdrop-blur-lg sm:p-8"
+                  >
+                    <div className="pointer-events-none absolute inset-0">
+                      <div className="absolute -top-10 right-0 h-32 w-32 rounded-full bg-[radial-gradient(circle,rgba(233,196,106,0.22),transparent_70%)] blur-3xl" />
+                    </div>
+                    <div className="relative h-40 w-40 overflow-hidden rounded-full border border-white/20 bg-white/10 shadow-[0_15px_45px_-25px_rgba(10,7,30,0.9)]">
+                      <Image
+                        src={profile.imageSrc}
+                        alt={profile.imageAlt}
+                        fill
+                        sizes="160px"
+                        className="object-cover object-top"
+                      />
+                    </div>
+                    <div className="relative space-y-2">
+                      <p className={`${displayFont.className} text-lg font-semibold text-[#F0F0F5] lg:text-xl`}>
+                        {profile.name}
+                      </p>
+                      <p className="text-xs uppercase tracking-[0.4em] text-[#E9C46A]/80 sm:text-sm">{profile.role}</p>
+                      <p className="text-xs text-[#C9A9E1]/80 sm:text-sm">{profile.parents}</p>
+                    </div>
+                    <p className="text-sm leading-6 text-[#F0F0F5]/75 sm:text-base lg:text-lg lg:leading-7">
+                      {profile.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </RevealSection>
+
+          <RevealSection
+            id="cerita"
+            className="relative mx-auto flex min-h-screen max-w-5xl items-center px-4 py-16 sm:px-6 sm:py-24"
+          >
+            <div className="relative flex w-full flex-col gap-10 overflow-hidden rounded-[2.5rem] border border-white/15 bg-white/10 p-8 shadow-[0_25px_120px_-45px_rgba(8,6,24,0.9)] backdrop-blur-2xl sm:p-12">
+              <div className="pointer-events-none absolute inset-0">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(201,169,225,0.2),transparent_65%)]" />
+              </div>
+              <div className="relative text-center">
+                <h2
+                  className={`${displayFont.className} text-xs font-semibold uppercase tracking-[0.55em] text-[#E9C46A] sm:text-sm lg:text-base lg:tracking-[0.6em]`}
+                >
+                  Cerita Kami
+                </h2>
+                <p className="mt-3 text-sm text-[#F0F0F5]/75 sm:text-base lg:text-lg">
+                  Perjalanan yang dipenuhi kepercayaan, dukungan keluarga, dan doa yang tidak pernah putus.
+                </p>
+              </div>
+              <ol className="relative space-y-8">
+                {timeline.map((event) => (
+                  <li
+                    key={event.year}
+                    className="relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#1A1B33]/75 via-[#1A1B33]/55 to-[#4B3F72]/60 p-6 text-left shadow-[0_18px_60px_-40px_rgba(8,6,24,0.9)] backdrop-blur sm:flex-row sm:items-start sm:gap-6"
+                  >
+                    <div className="pointer-events-none absolute inset-0">
+                      <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-[#E9C46A]/40 to-transparent" />
+                    </div>
+                    <div className="relative text-xs font-semibold uppercase tracking-[0.45em] text-[#E9C46A]/80 sm:w-32 sm:text-sm">
+                      {event.year}
+                    </div>
+                    <div className="relative flex-1 space-y-2">
+                      <p className={`${displayFont.className} text-base uppercase tracking-[0.3em] text-[#F0F0F5] lg:text-lg`}>
+                        {event.title}
+                      </p>
+                      <p className="text-sm leading-6 text-[#F0F0F5]/80 sm:text-base lg:text-lg lg:leading-7">
+                        {event.description}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </RevealSection>
+
+          <RevealSection
+            id="akad-resepsi"
+            className="relative mx-auto flex min-h-screen max-w-5xl items-center px-4 py-16 sm:px-6 sm:py-24"
+          >
+            <div className="relative w-full space-y-8 overflow-hidden rounded-[2.5rem] border border-white/15 bg-white/10 p-8 shadow-[0_25px_120px_-45px_rgba(8,6,24,0.9)] backdrop-blur-2xl sm:space-y-10 sm:p-12">
+              <div className="pointer-events-none absolute inset-0">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(201,169,225,0.2),transparent_65%)]" />
+              </div>
+              <div className="relative text-center">
+                <h2
+                  className={`${displayFont.className} text-xs font-semibold uppercase tracking-[0.55em] text-[#E9C46A] sm:text-sm lg:text-base lg:tracking-[0.6em]`}
+                >
+                  Akad &amp; Resepsi
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-[#F0F0F5]/75 sm:text-base lg:text-lg lg:leading-7">
+                  Rangkaian acara pernikahan Entin dan Rizky akan berlangsung dalam suasana hangat di lokasi yang sama.
+                  Berikut jadwal lengkapnya.
+                </p>
+              </div>
+              <div className="relative space-y-6 overflow-hidden rounded-[2rem] border border-white/12 bg-gradient-to-br from-[#1A1B33]/75 via-[#1A1B33]/55 to-[#4B3F72]/65 p-6 shadow-[0_20px_70px_-40px_rgba(8,6,24,0.9)] sm:p-10">
+                <div className="pointer-events-none absolute inset-0">
+                  <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-[radial-gradient(circle,rgba(233,196,106,0.25),transparent_70%)] blur-3xl" />
+                </div>
+                <div className="relative space-y-3">
+                  <p className="text-xs uppercase tracking-[0.45em] text-[#E9C46A]/80 sm:text-sm">Akad Nikah</p>
+                  <p className={`${displayFont.className} text-lg font-semibold text-[#F0F0F5] lg:text-xl`}>
+                    Jumat, 26 Desember 2025 &bull; 09.00 WIB
+                  </p>
+                  <p className="text-sm leading-7 text-[#F0F0F5]/80 sm:text-base lg:text-lg lg:leading-8">
+                    Prosesi akad nikah berlangsung khidmat dan penuh doa bersama keluarga inti.
+                  </p>
+                </div>
+                <div className="relative h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                <div className="relative space-y-3">
+                  <p className="text-xs uppercase tracking-[0.45em] text-[#E9C46A]/80 sm:text-sm">Resepsi</p>
+                  <p className={`${displayFont.className} text-lg font-semibold text-[#F0F0F5] lg:text-xl`}>
+                    Sabtu, 27 Desember 2025 &bull; 18.00 WIB
+                  </p>
+                  <p className="text-sm leading-7 text-[#F0F0F5]/80 sm:text-base lg:text-lg lg:leading-8">
+                    Sesi ramah tamah dan silaturahmi bersama keluarga, kerabat, dan sahabat dekat.
+                  </p>
+                </div>
+                <div className="relative border-t border-white/10 pt-6 text-left">
+                  <p className="text-xs uppercase tracking-[0.45em] text-[#E9C46A]/80 sm:text-sm">Lokasi Acara</p>
+                  <div className="mt-3 space-y-3 text-sm leading-7 text-[#F0F0F5]/80 sm:text-base lg:text-lg lg:leading-8">
+                    <p className={`${displayFont.className} text-base font-semibold text-[#F0F0F5] lg:text-lg`}>
+                      Kediaman Keluarga Jikan
+                    </p>
+                    <p>Dusun Mulyorejo Rt.2 Rw.2 Desa Wringinrejo, Kecamatan Gambiran, Banyuwangi 68486</p>
+                  </div>
+                  <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+                    <Link
+                      href="https://www.google.com/maps/place/Jl.+Melati+No.+45,+Banyuwangi"
+                      className="inline-flex items-center justify-center rounded-full bg-[#E9C46A] px-6 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#1A1B33] transition hover:bg-[#f1d498]"
+                    >
+                      Buka di Google Maps
+                    </Link>
+                  </div>
+                  <div className="mt-5 overflow-hidden rounded-3xl border border-white/12 bg-white/[0.08] shadow-[inset_0_0_30px_rgba(12,10,38,0.45)]">
+                    <iframe
+                      title="Peta Kediaman Keluarga Jikan"
+                      src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7894.228552596835!2d114.1737971254337!3d-8.390419952329909!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sid!4v1760877238332!5m2!1sen!2sid"
+                      className="h-72 w-full border-0"
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <p className="text-xs uppercase tracking-[0.35em] text-gray-500">{profile.role}</p>
-                    <p className="text-lg font-semibold uppercase tracking-[0.32em] text-gray-900">{profile.name}</p>
-                    <p className="text-sm text-gray-600">{profile.parents}</p>
-                  </div>
-                  <p className="text-sm leading-6 text-gray-500">{profile.description}</p>
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
-        </RevealSection>
+          </RevealSection>
 
-        <RevealSection
-          id="cerita"
-          className="mx-auto flex min-h-screen max-w-4xl items-center px-4 py-16 sm:px-6 sm:py-24"
-        >
-          <div className="flex w-full flex-col gap-10 rounded-[2.5rem] border border-gray-200 bg-white/80 p-8 shadow-sm backdrop-blur sm:p-12">
-            <div className="text-center">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.4em] text-gray-700">Cerita Kami</h2>
-              <p className="mt-3 text-sm text-gray-500">
-                Perjalanan yang dipenuhi kepercayaan, dukungan keluarga, dan doa yang tidak pernah putus.
-              </p>
-            </div>
-            <ol className="space-y-8">
-              {timeline.map((event) => (
-                <li key={event.year} className="flex flex-col gap-3 rounded-2xl border border-gray-200 bg-white/70 p-6 text-left shadow-sm sm:flex-row sm:items-start sm:gap-6">
-                  <div className="text-xs font-semibold uppercase tracking-[0.35em] text-gray-500 sm:w-32">
-                    {event.year}
-                  </div>
-                  <div className="flex-1 space-y-2">
-                    <p className="text-base font-medium uppercase tracking-[0.28em] text-gray-900">{event.title}</p>
-                    <p className="text-sm leading-6 text-gray-600">{event.description}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </RevealSection>
-
-        <RevealSection
-          id="akad-resepsi"
-          className="mx-auto flex min-h-screen max-w-4xl items-center px-4 py-16 sm:px-6 sm:py-24"
-        >
-          <div className="w-full space-y-8 rounded-[2.5rem] border border-gray-200 bg-white/75 p-8 shadow-sm backdrop-blur sm:space-y-10 sm:p-12">
-            <div className="text-center">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.4em] text-gray-700">Akad &amp; Resepsi</h2>
-              <p className="mt-3 text-sm leading-6 text-gray-600">
-                Rangkaian acara pernikahan Entin dan Rizky akan berlangsung dalam suasana hangat di lokasi yang sama.
-                Berikut jadwal lengkapnya.
-              </p>
-            </div>
-            <div className="space-y-6 rounded-[2rem] border border-gray-200 bg-white/80 p-6 shadow-sm sm:p-10">
-              <div className="space-y-3">
-                <p className="text-xs uppercase tracking-[0.35em] text-gray-500">Akad Nikah</p>
-                <p className="text-lg font-medium text-gray-900">Jumat, 26 Desember 2025 &bull; 09.00 WIB</p>
-                <p className="text-sm leading-7 text-gray-600">
-                  Prosesi akad nikah berlangsung khidmat dan penuh doa bersama keluarga inti.
+          <RevealSection
+            id="galeri"
+            className="relative mx-auto flex min-h-screen max-w-5xl items-center px-4 py-16 sm:px-6 sm:py-24"
+          >
+            <div className="flex w-full flex-col gap-12">
+              <div className="text-center">
+                <h2
+                  className={`${displayFont.className} text-xs font-semibold uppercase tracking-[0.55em] text-[#E9C46A] sm:text-sm lg:text-base lg:tracking-[0.6em]`}
+                >
+                  Galeri
+                </h2>
+                <p className="mt-3 text-sm text-[#F0F0F5]/75 sm:text-base lg:text-lg">
+                  Koleksi visual yang menangkap ritme keseharian kami -- dari perjalanan kota hingga momen intim bersama
+                  keluarga.
                 </p>
               </div>
-              <div className="h-px w-full bg-gray-200" />
-              <div className="space-y-3">
-                <p className="text-xs uppercase tracking-[0.35em] text-gray-500">Resepsi</p>
-                <p className="text-lg font-medium text-gray-900">Sabtu, 27 Desember 2025 &bull; 18.00 WIB</p>
-                <p className="text-sm leading-7 text-gray-600">
-                  Sesi ramah tamah dan silaturahmi bersama keluarga, kerabat, dan sahabat dekat.
+              <WeddingGallery images={galleryImages} />
+            </div>
+          </RevealSection>
+
+          <RevealSection
+            id="wishes"
+            className="relative mx-auto flex min-h-screen max-w-5xl items-center px-4 py-16 sm:px-6 sm:py-24"
+          >
+            <div className="relative w-full space-y-10 overflow-hidden rounded-[2.5rem] border border-white/15 bg-white/10 p-8 shadow-[0_25px_120px_-45px_rgba(8,6,24,0.9)] backdrop-blur-2xl sm:p-12">
+              <div className="pointer-events-none absolute inset-0">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(201,169,225,0.2),transparent_65%)]" />
+              </div>
+              <div className="relative text-center">
+                <h2
+                  className={`${displayFont.className} text-xs font-semibold uppercase tracking-[0.55em] text-[#E9C46A] sm:text-sm lg:text-base lg:tracking-[0.6em]`}
+                >
+                  Ucapan &amp; Hadiah
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-[#F0F0F5]/75 sm:text-base lg:text-lg lg:leading-7">
+                  Bagikan doa terbaik Anda dan temukan informasi hadiah pernikahan di satu tempat.
                 </p>
               </div>
-              <div className="border-t border-gray-200 pt-6 text-left">
-                <p className="text-xs uppercase tracking-[0.35em] text-gray-500">Lokasi Acara</p>
-                <div className="mt-3 space-y-3 text-sm leading-7 text-gray-600">
-                  <p className="text-base font-medium text-gray-900">Kediaman Keluarga Jikan</p>
-                  <p>Dusun Mulyorejo Rt.2 Rw.2 Desa Wringinrejo, Kecamatan Gambiran, Banyuwangi 68486</p>
-                </div>
-                <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-                  <Link
-                    href="https://www.google.com/maps/place/Jl.+Melati+No.+45,+Banyuwangi"
-                    className="inline-flex items-center justify-center rounded-full bg-gray-900 px-6 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-white transition hover:bg-gray-700"
-                  >
-                    Buka di Google Maps
-                  </Link>
-                </div>
-                <div className="mt-5 overflow-hidden rounded-3xl border border-gray-200 bg-gray-100/80 shadow-inner">
-                  <iframe
-                    title="Peta Kediaman Keluarga Jikan"
-                    src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d7894.228552596835!2d114.1737971254337!3d-8.390419952329909!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sid!4v1760877238332!5m2!1sen!2sid"
-                    className="h-72 w-full border-0"
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </RevealSection>
-
-        <RevealSection
-          id="galeri"
-          className="mx-auto flex min-h-screen max-w-5xl items-center px-4 py-16 sm:px-6 sm:py-24"
-        >
-          <div className="flex w-full flex-col gap-12">
-            <div className="text-center">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.4em] text-gray-700">Galeri</h2>
-              <p className="mt-3 text-sm text-gray-500">
-                Koleksi visual yang menangkap ritme keseharian kami -- dari perjalanan kota hingga momen intim bersama
-                keluarga.
-              </p>
-            </div>
-            <WeddingGallery images={galleryImages} />
-          </div>
-        </RevealSection>
-
-        <RevealSection
-          id="wishes"
-          className="mx-auto flex min-h-screen max-w-5xl items-center px-4 py-16 sm:px-6 sm:py-24"
-        >
-          <div className="w-full space-y-10 rounded-[2.5rem] border border-gray-200 bg-white/85 p-8 shadow-sm backdrop-blur sm:p-12">
-            <div className="text-center">
-              <h2 className="text-xs font-semibold uppercase tracking-[0.4em] text-gray-700">Ucapan &amp; Hadiah</h2>
-              <p className="mt-3 text-sm leading-6 text-gray-600">
-                Bagikan doa terbaik Anda dan temukan informasi hadiah pernikahan di satu tempat.
-              </p>
-            </div>
-            <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
-              <div className="flex flex-col gap-6 rounded-[2rem] border border-gray-200 bg-white/90 p-6 text-left shadow-sm sm:p-8">
-                <div className="space-y-3 text-center sm:text-left">
-                  <p className="text-xs uppercase tracking-[0.35em] text-gray-500">Ucapan Tamu</p>
-                  <p className="text-sm leading-6 text-gray-600">
-                    Terima kasih atas setiap doa dan dukungan yang telah Anda titipkan untuk perjalanan kami.
-                  </p>
-                </div>
-                <div className="space-y-5">
-                  {paginatedWishes.map((message) => (
-                    <div key={message} className="rounded-2xl border border-gray-200 bg-white/95 p-5 shadow-sm">
-                      <p className="text-sm leading-6 text-gray-600">{message}</p>
-                    </div>
-                  ))}
-                </div>
-                {/* <p className="text-center text-xs uppercase tracking-[0.35em] text-gray-400 sm:text-left">
-                  Dengan tulus,
-                  <br />
-                  Dewi &amp; Aditya
-                </p> */}
-                {/* <div className="flex flex-col gap-3 rounded-3xl border border-gray-200 bg-white/95 p-4 text-[0.65rem] uppercase tracking-[0.18em] text-gray-600 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:text-xs sm:tracking-[0.25em]">
-                  <button
-                    type="button"
-                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                    disabled={page === 1}
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-full px-3 py-2 font-semibold transition hover:text-gray-900 disabled:opacity-40 sm:w-auto"
-                  >
-                    <span aria-hidden="true">â†</span>
-                    Sebelumnya
-                  </button>
-                  <div className="flex flex-wrap items-center justify-center gap-2">
-                    {pageNumbers.map((pageNumber) => (
-                      <button
-                        key={pageNumber}
-                        type="button"
-                        onClick={() => setCurrentPage(pageNumber)}
-                        className={`h-9 w-9 rounded-full text-[0.7rem] font-semibold transition ${
-                          pageNumber === page
-                            ? "bg-gray-900 text-white"
-                            : "bg-white text-gray-600 hover:bg-gray-100"
-                        }`}
-                        aria-current={pageNumber === page ? "page" : undefined}
+              <div className="relative grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+                <div className="flex flex-col gap-6 rounded-[2rem] border border-white/12 bg-gradient-to-br from-[#1A1B33]/75 via-[#1A1B33]/55 to-[#4B3F72]/65 p-6 text-left shadow-[0_20px_70px_-40px_rgba(8,6,24,0.9)] backdrop-blur sm:p-8">
+                  <div className="space-y-3 text-center sm:text-left">
+                    <p className="text-xs uppercase tracking-[0.45em] text-[#E9C46A]/80 sm:text-sm">Ucapan Tamu</p>
+                    <p className="text-sm leading-6 text-[#F0F0F5]/80 sm:text-base lg:text-lg lg:leading-7">
+                      Terima kasih atas setiap doa dan dukungan yang telah Anda titipkan untuk perjalanan kami.
+                    </p>
+                  </div>
+                  <div className="space-y-5">
+                    {paginatedWishes.map((message) => (
+                      <div
+                        key={message}
+                        className="rounded-2xl border border-white/12 bg-white/10 p-5 shadow-[0_18px_50px_-35px_rgba(8,6,24,0.9)]"
                       >
-                        {String(pageNumber).padStart(2, "0")}
-                      </button>
+                        <p className="text-sm leading-6 text-[#F0F0F5]/75 sm:text-base lg:text-lg lg:leading-7">
+                          {message}
+                        </p>
+                      </div>
                     ))}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                    disabled={page === totalPages}
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-full px-3 py-2 font-semibold transition hover:text-gray-900 disabled:opacity-40 sm:w-auto"
-                  >
-                    Selanjutnya
-                    <span aria-hidden="true">â†’</span>
-                  </button>
-                </div> */}
-              </div>
-              <div className="flex h-full flex-col justify-between gap-6 rounded-[2rem] border border-gray-200 bg-white/90 p-6 text-center shadow-sm sm:p-8">
-                <div className="space-y-3">
-                  <p className="text-xs uppercase tracking-[0.35em] text-gray-500">Hadiah Pernikahan</p>
-                  <p className="text-sm leading-6 text-gray-600">
-                    Kehadiran dan doa Anda sudah sangat berarti. Bagi yang ingin berbagi tanda kasih, berikut informasi
-                    rekening dan e-wallet yang dapat digunakan.
-                  </p>
                 </div>
-                <div className="space-y-4 text-left text-sm leading-6 text-gray-600">
-                  <div className="rounded-xl border border-dashed border-gray-300 bg-white/95 p-4">
-                    <p className="text-xs uppercase tracking-[0.3em] text-gray-500">Bank BCA</p>
-                    <p className="mt-1 font-medium text-gray-900">1234567890</p>
-                    <p className="text-xs text-gray-500">a.n. Entin Endah Cahyati</p>
+                <div className="flex h-full flex-col justify-between gap-6 rounded-[2rem] border border-white/12 bg-gradient-to-br from-[#1A1B33]/75 via-[#1A1B33]/55 to-[#4B3F72]/65 p-6 text-center shadow-[0_20px_70px_-40px_rgba(8,6,24,0.9)] backdrop-blur sm:p-8">
+                  <div className="space-y-3">
+                    <p className="text-xs uppercase tracking-[0.45em] text-[#E9C46A]/80 sm:text-sm">Hadiah Pernikahan</p>
+                    <p className="text-sm leading-6 text-[#F0F0F5]/80 sm:text-base lg:text-lg lg:leading-7">
+                      Kehadiran dan doa Anda sudah sangat berarti. Bagi yang ingin berbagi tanda kasih, berikut informasi
+                      rekening dan e-wallet yang dapat digunakan.
+                    </p>
                   </div>
-                  <div className="rounded-xl border border-dashed border-gray-300 bg-white/95 p-4">
-                    <p className="text-xs uppercase tracking-[0.3em] text-gray-500">QRIS / E-Wallet</p>
-                    <p className="mt-1 text-gray-600">Scan melalui tautan berikut untuk dukungan digital envelope.</p>
+                  <div className="space-y-4 text-left text-sm leading-6 text-[#F0F0F5]/80 sm:text-base lg:text-lg lg:leading-7">
+                    <div className="rounded-xl border border-dashed border-white/20 bg-white/10 p-4">
+                      <p className="text-xs uppercase tracking-[0.4em] text-[#E9C46A]/75 sm:text-sm">Bank BCA</p>
+                      <p className={`${displayFont.className} mt-1 text-lg text-[#F0F0F5] lg:text-xl`}>1234567890</p>
+                      <p className="text-xs text-[#C9A9E1]/80 sm:text-sm">a.n. Entin Endah Cahyati</p>
+                    </div>
+                    <div className="rounded-xl border border-dashed border-white/20 bg-white/10 p-4">
+                      <p className="text-xs uppercase tracking-[0.4em] text-[#E9C46A]/75 sm:text-sm">QRIS / E-Wallet</p>
+                      <p className="mt-1 text-[#F0F0F5]/80">
+                        Scan melalui tautan berikut untuk dukungan digital envelope.
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-                  <Link
-                    href="https://wa.me/"
-                    className="inline-flex items-center justify-center rounded-full bg-gray-900 px-7 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-white transition hover:bg-gray-700"
-                  >
-                    Konfirmasi Transfer
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={() => setIsQrModalOpen(true)}
-                    className="inline-flex items-center justify-center rounded-full border border-gray-300 px-7 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-gray-900 transition hover:border-gray-900"
-                  >
-                    Lihat QR Digital
-                  </button>
+                  <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+                    <Link
+                      href="https://wa.me/"
+                      className="inline-flex items-center justify-center rounded-full bg-[#E9C46A] px-7 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#1A1B33] transition hover:bg-[#f1d498]"
+                    >
+                      Konfirmasi Transfer
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => setIsQrModalOpen(true)}
+                      className="inline-flex items-center justify-center rounded-full border border-[#E9C46A]/60 px-7 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#F0F0F5] transition hover:bg-[#E9C46A]/10"
+                    >
+                      Lihat QR Digital
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </RevealSection>
+          </RevealSection>
+        </div>
       </main>
       {isQrModalOpen ? (
         <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 px-6 py-12"
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-[#05071a]/80 px-6 py-12"
           onClick={() => setIsQrModalOpen(false)}
           role="presentation"
         >
           <div
-            className="relative w-full max-w-sm rounded-[1.75rem] border border-gray-200 bg-white p-6 text-center shadow-xl sm:p-8"
+            className="relative w-full max-w-sm overflow-hidden rounded-[1.75rem] border border-white/12 bg-gradient-to-br from-[#1A1B33]/95 to-[#4B3F72]/90 p-6 text-center shadow-[0_25px_80px_-35px_rgba(5,5,20,0.9)] backdrop-blur-xl sm:p-8"
             onClick={(event) => event.stopPropagation()}
             role="dialog"
             aria-modal="true"
@@ -557,15 +684,18 @@ export default function WeddingPage() {
             <button
               type="button"
               onClick={() => setIsQrModalOpen(false)}
-              className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-xs font-semibold uppercase tracking-[0.2em] text-gray-500 transition hover:border-gray-900 hover:text-gray-900"
+              className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-xs font-semibold uppercase tracking-[0.25em] text-[#F0F0F5]/70 transition hover:border-[#E9C46A]/70 hover:text-[#E9C46A]"
               aria-label="Tutup QR digital"
             >
               X
             </button>
-            <p id="qr-modal-title" className="text-xs uppercase tracking-[0.3em] text-gray-500">
+            <p
+              id="qr-modal-title"
+              className={`${displayFont.className} text-xs uppercase tracking-[0.5em] text-[#E9C46A]/85`}
+            >
               QR Digital
             </p>
-            <div className="mx-auto h-64 w-64 max-w-full overflow-hidden rounded-[1.25rem] border border-dashed border-gray-300 bg-gray-50 p-4">
+            <div className="mx-auto mt-5 h-64 w-64 max-w-full overflow-hidden rounded-[1.25rem] border border-dashed border-white/20 bg-white/10 p-4">
               <div className="relative h-full w-full">
                 <Image
                   src="/gallery/qris.svg"
@@ -577,7 +707,7 @@ export default function WeddingPage() {
                 />
               </div>
             </div>
-            <p className="mt-5 text-sm leading-6 text-gray-600">
+            <p className="mt-5 text-sm leading-6 text-[#F0F0F5]/75">
               Scan kode QRIS ini untuk berbagi hadiah secara digital. Terima kasih atas perhatian Anda.
             </p>
           </div>
@@ -586,5 +716,3 @@ export default function WeddingPage() {
     </InvitationShell>
   );
 }
-
-
