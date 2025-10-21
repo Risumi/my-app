@@ -56,7 +56,7 @@ export default function FloatingNav({ sections }: FloatingNavProps) {
       className="pointer-events-none fixed inset-x-0 bottom-6 z-40 flex justify-center px-4 sm:bottom-10"
       style={{ paddingBottom: "max(0px, env(safe-area-inset-bottom))" }}
     >
-      <nav className="pointer-events-auto flex items-center gap-1 rounded-full border border-gray-200 bg-white/90 px-2 py-1.5 shadow-lg backdrop-blur sm:gap-2 sm:px-3 sm:py-2">
+      <nav className="pointer-events-auto flex items-center gap-1 rounded-full border border-[#2f7f88]/40 bg-[#041b27]/85 px-2 py-1.5 shadow-[0_16px_45px_rgba(3,19,28,0.45)] backdrop-blur sm:gap-2 sm:px-3 sm:py-2">
         {sections.map((section) => {
           const isActive = section.id === activeId;
           const icon = section.icon ?? "\u2022";
@@ -89,10 +89,10 @@ export default function FloatingNav({ sections }: FloatingNavProps) {
               href={`#${section.id}`}
               aria-label={section.label}
               onClick={handleClick}
-              className={`flex h-9 w-9 items-center justify-center rounded-full text-base transition sm:h-10 sm:w-10 sm:text-lg ${
+              className={`flex h-9 w-9 items-center justify-center rounded-full border border-transparent text-base transition sm:h-10 sm:w-10 sm:text-lg ${
                 isActive
-                  ? "bg-gray-900 text-white shadow"
-                  : "text-gray-500 hover:bg-gray-100"
+                  ? "border-[#f0e2b6]/60 bg-[#d3b06a] text-[#041520] shadow-[0_0_18px_rgba(241,223,176,0.6)]"
+                  : "text-teal-200/70 hover:border-teal-300/40 hover:bg-teal-200/10"
               }`}
             >
               <span aria-hidden="true" className="flex items-center justify-center">

@@ -163,8 +163,8 @@ export default function WeddingGallery({ images }: WeddingGalleryProps) {
       onFocusCapture={markInteracting}
       onBlurCapture={markInteracting}
     >
-      <div className="relative overflow-hidden rounded-[2.5rem] border border-gray-300 bg-white/40 p-4 shadow-lg backdrop-blur">
-        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-gray-200">
+      <div className="relative overflow-hidden rounded-[2.5rem] border border-[#2f7f88]/45 bg-[#04121c]/70 p-4 shadow-[0_30px_70px_rgba(3,20,32,0.5)] backdrop-blur">
+        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-[#021018]">
           <Image
             src={activeImage.src}
             alt={activeImage.alt}
@@ -175,18 +175,18 @@ export default function WeddingGallery({ images }: WeddingGalleryProps) {
           />
         </div>
         <div className="mt-6 flex flex-col gap-2 px-2 pb-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-gray-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-teal-200/70">
             {activeImage.title}
           </p>
-          <p className="text-sm leading-6 text-gray-600">{activeImage.description}</p>
+          <p className="text-sm leading-6 text-teal-100/80">{activeImage.description}</p>
         </div>
       </div>
 
       <div className="flex items-center justify-between">
-        <span className="text-xs uppercase tracking-[0.3em] text-gray-500">
+        <span className="text-xs uppercase tracking-[0.3em] text-teal-200/70">
           Pilih Momen
         </span>
-        <span className="text-xs text-gray-400">
+        <span className="text-xs text-teal-200/50">
           {String(normalizedIndex + 1).padStart(2, "0")}/{String(totalImages).padStart(2, "0")}
         </span>
       </div>
@@ -195,7 +195,7 @@ export default function WeddingGallery({ images }: WeddingGalleryProps) {
         <button
           type="button"
           onClick={() => scrollThumbnails("prev")}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 bg-white/90 text-gray-700 shadow transition hover:border-gray-400 hover:text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 disabled:cursor-not-allowed disabled:border-gray-200 disabled:text-gray-300"
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-[#2f7f88]/55 bg-[#031b28]/95 text-teal-100/80 shadow-[0_15px_35px_rgba(3,20,36,0.45)] transition hover:border-[#f4e5b5]/55 hover:text-[#f4e5b5] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f4e5b5]/40 disabled:cursor-not-allowed disabled:border-[#1a3a46]/60 disabled:text-teal-200/30"
           disabled={totalImages <= 1}
           aria-label="Foto sebelumnya"
         >
@@ -213,10 +213,10 @@ export default function WeddingGallery({ images }: WeddingGalleryProps) {
                 key={`${image.src}-${image.virtualIndex}`}
                 type="button"
                 onClick={() => handleThumbnailClick(image.originalIndex)}
-                className={`group relative flex-shrink-0 overflow-hidden rounded-2xl border transition focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 ${
+                className={`group relative flex-shrink-0 overflow-hidden rounded-2xl border transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f4e5b5]/50 ${
                   isActive
-                    ? "border-gray-900"
-                    : "border-gray-200 hover:border-gray-400"
+                    ? "border-[#f4e5b5]/70 shadow-[0_15px_35px_rgba(12,80,102,0.45)]"
+                    : "border-[#2f7f88]/45 hover:border-[#f4e5b5]/40"
                 }`}
                 style={{ width: `${THUMB_WIDTH}px`, height: "160px" }}
                 aria-label={`Tampilkan foto ${image.title}`}
@@ -232,7 +232,7 @@ export default function WeddingGallery({ images }: WeddingGalleryProps) {
                 />
                 <span
                   className={`absolute inset-0 border-2 transition ${
-                    isActive ? "border-gray-900 mix-blend-screen" : "border-transparent"
+                    isActive ? "border-[#f4e5b5]/70 mix-blend-screen" : "border-transparent"
                   }`}
                   aria-hidden="true"
                 />
@@ -244,7 +244,7 @@ export default function WeddingGallery({ images }: WeddingGalleryProps) {
         <button
           type="button"
           onClick={() => scrollThumbnails("next")}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 bg-white/90 text-gray-700 shadow transition hover:border-gray-400 hover:text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 disabled:cursor-not-allowed disabled:border-gray-200 disabled:text-gray-300"
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-[#2f7f88]/55 bg-[#031b28]/95 text-teal-100/80 shadow-[0_15px_35px_rgba(3,20,36,0.45)] transition hover:border-[#f4e5b5]/55 hover:text-[#f4e5b5] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f4e5b5]/40 disabled:cursor-not-allowed disabled:border-[#1a3a46]/60 disabled:text-teal-200/30"
           disabled={totalImages <= 1}
           aria-label="Foto selanjutnya"
         >
