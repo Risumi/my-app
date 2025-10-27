@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ReactNode, MouseEvent } from "react";
 
 type Section = {
@@ -11,10 +11,20 @@ type Section = {
 
 type FloatingNavProps = {
   sections: Section[];
+  hiddenSectionIds?: string[];
 };
 
-export default function FloatingNav({ sections }: FloatingNavProps) {
-  const [activeId, setActiveId] = useState<string | null>(sections[0]?.id ?? null);
+export default function FloatingNav({ sections, hiddenSectionIds = [] }: FloatingNavProps) {
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const normalizedHiddenIds = useMemo(
+    () => hiddenSectionIds.filter((id): id is string => Boolean(id)),
+    [hiddenSectionIds],
+  );
+  const hiddenIds = useMemo(() => new Set(normalizedHiddenIds), [normalizedHiddenIds]);
+  const visibleSections = useMemo(
+    () => sections.filter((section) => !hiddenIds.has(section.id)),
+    [sections, hiddenIds],
+  );
 
   useEffect(() => {
     if (sections.length === 0) {
@@ -37,27 +47,39 @@ export default function FloatingNav({ sections }: FloatingNavProps) {
       },
     );
 
-    sections.forEach((section) => {
-      const el = document.getElementById(section.id);
+    const idsToObserve = Array.from(new Set([...sections.map((section) => section.id), ...normalizedHiddenIds]));
+
+    idsToObserve.forEach((id) => {
+      const el = document.getElementById(id);
       if (el) {
         observer.observe(el);
       }
     });
 
     return () => observer.disconnect();
-  }, [sections]);
+  }, [sections, normalizedHiddenIds]);
 
   if (sections.length === 0) {
     return null;
   }
+
+  if (visibleSections.length === 0) {
+    return null;
+  }
+
+  const shouldHide = activeId ? hiddenIds.has(activeId) : true;
 
   return (
     <div
       className="pointer-events-none fixed inset-x-0 bottom-6 z-40 flex justify-center px-4 sm:bottom-10"
       style={{ paddingBottom: "max(0px, env(safe-area-inset-bottom))" }}
     >
-      <nav className="pointer-events-auto flex items-center gap-1 rounded-full border border-gray-200 bg-white/90 px-2 py-1.5 shadow-lg backdrop-blur sm:gap-2 sm:px-3 sm:py-2">
-        {sections.map((section) => {
+      <nav
+        className={`flex items-center gap-1 rounded-full border border-gray-200 bg-white/90 px-2 py-1.5 shadow-lg backdrop-blur transition-all duration-300 transform sm:gap-2 sm:px-3 sm:py-2 ${
+          shouldHide ? "pointer-events-none translate-y-6 opacity-0" : "pointer-events-auto translate-y-0 opacity-100"
+        }`}
+      >
+        {visibleSections.map((section) => {
           const isActive = section.id === activeId;
           const icon = section.icon ?? "\u2022";
 
